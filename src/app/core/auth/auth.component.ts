@@ -24,8 +24,18 @@ import { SupabaseService } from '../services/supabase.service';
             />
           </div>
           <div>
+            <label for="password">Password</label>
+            <input
+              id="password"
+              formControlName="password"
+              class="inputField"
+              type="password"
+              placeholder="Your password"
+            />
+          </div>
+          <div>
             <button type="submit" class="button block" [disabled]="loading">
-              {{ loading ? 'Loading' : 'Send magic link' }}
+              {{ loading ? 'Loading' : 'Sign in' }}
             </button>
           </div>
         </form>
@@ -40,6 +50,7 @@ export class AuthComponent {
 
   signInForm = this.formBuilder.group({
     email: '',
+    password: '',
   })
 
   constructor(
@@ -50,10 +61,9 @@ export class AuthComponent {
   async onSubmit(): Promise<void> {
     try {
       this.loading = true
-      const email = this.signInForm.value.email as string
-      const { error } = await this.supabase.signIn(email)
-      if (error) throw error
-      alert('Check your email for the login link!')
+      const email = this.signInForm.value.email as string;
+      const password = this.signInForm.value.password as string;
+      await this.supabase.signIn(email, password)
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message)

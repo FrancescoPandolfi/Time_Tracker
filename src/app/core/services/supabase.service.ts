@@ -11,7 +11,7 @@ export interface Profile {
   providedIn: 'root'
 })
 export class SupabaseService {
-  private supabase: SupabaseClient
+  private readonly supabase: SupabaseClient
   _session: AuthSession | null = null
 
   constructor() {
@@ -25,10 +25,14 @@ export class SupabaseService {
     return this._session
   }
 
+  get client() {
+    return this.supabase
+  }
+
   profile(user: User) {
     return this.supabase
       .from('profiles')
-      .select(`username`)
+      .select(`username, role`)
       .eq('id', user.id)
       .single()
   }
@@ -37,11 +41,8 @@ export class SupabaseService {
     return this.supabase.auth.onAuthStateChange(callback)
   }
 
-  signIn(email: string) {
-    return this.supabase.auth.signInWithPassword({
-      email: 'francesco.pan@gmail.com',
-      password: '123456',
-    })
+  signIn(email: string, password: string) {
+    return this.supabase.auth.signInWithPassword({ email, password })
   }
 
   signOut() {

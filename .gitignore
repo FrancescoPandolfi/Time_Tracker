@@ -3,3 +3,9 @@ src/environments/
 node_modules/
 
 .idea/
+
+*.pack
+
+.angular/cache/16.0.2/babel-webpack/
+
+*.old
